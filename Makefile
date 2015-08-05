@@ -1,6 +1,6 @@
 ###############################################################################
 # Bins and Flags
-CXX=gcc
+CXX=g++
 CXXFLAGS=--std=c++11 -Wall -Wextra
 LDFLAGS=-lglpk
 
@@ -36,13 +36,13 @@ debug: CFLAGS+=-g -ggdb
 debug: $(DEBUG_BIN)
 
 $(BIN):	$(OBJ)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 $(DEBUG_BIN): $(DEBUG_OBJ)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 $(BUILD_DIR)/$(DEBUG_DIR)/%.o $(BUILD_DIR)/$(RELEASE_DIR)/%.o: $(SRC_DIR)/%.cc
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 releasedirs:
 	$(MKDIR) $(BUILD_DIR)/$(RELEASE_DIR)
