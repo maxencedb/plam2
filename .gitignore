@@ -26,3 +26,13 @@
 *.exe
 *.out
 *.app
+
+# Latex junk
+*.aux
+*.dvi
+*.pdf
+*.synctex.gz
+*.log
+
+# pdf subject
+Sujet PLAM 2016.pdf
