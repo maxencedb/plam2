@@ -1,4 +1,5 @@
 # Sources
 SRC=\
-    main.cc
+    main.cc	\
+    parser.cc
 
