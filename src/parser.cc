@@ -6,6 +6,7 @@
 Parser::Parser(std::string path)
     : nr_sites(-1)
     , nr_warhouses(-1)
+    , max_capacity(-1)
     , capacities()
     , positions()
     , path(path)
@@ -23,8 +24,6 @@ bool Parser::load()
         return false;
     }
 
-    std::cout << "DEBUG parser.cc 25: sites :" << nr_sites << " ware: " << nr_warhouses << "\n";
-
     // Prepare vectors in case of big malloc ahead
     capacities.reserve(nr_sites);
     positions.reserve(nr_sites);
@@ -40,6 +39,10 @@ bool Parser::load()
     {
         capacities.push_back(c);
         positions.push_back(std::make_pair(x, y));
+
+        // update max
+        if (c > max_capacity)
+            max_capacity = c;
     }
 
     // Reading done, close

@@ -18,6 +18,7 @@ class Parser
         /* variables gathered from doc */
         int nr_sites;
         int nr_warhouses;
+        int max_capacity;
         std::vector<int> capacities;
         std::vector<std::pair<int, int>> positions;
 
