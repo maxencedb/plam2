@@ -1,5 +1,10 @@
 # Sources
 SRC=\
-    main.cc	\
-    parser.cc
+    main.cc		\
+    parser.cc		\
+    variable.cc		\
+    constraint.cc	\
+    plam_dirty_old.cc	\
+    plam.cc		\
+    problem.cc
 
