@@ -129,5 +129,17 @@ void plam(const Parser& p, std::ostream& output)
 
     /* Do magic */
     prob.solve();
-    prob.display_solution(output);
+
+    /* Display solution */
+    //prob.display_solution(output);
+    
+    for (int i = 0; i < p.nr_sites; ++i)
+    {
+        std::stringstream ss;
+        ss << "b" << i + 1;
+
+        if (prob.get_var_value(ss.str()) > 0.5)
+            output << i + 1 << " ";
+    }
+    output << "\n";
 }

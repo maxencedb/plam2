@@ -31,6 +31,8 @@ class Problem
         bool add_constraint(const Constraint& c);
         void solve();
         void display_solution(std::ostream& output);
+        double get_var_value(std::string name);
+        double get_obj_value();
 
     private:
         // The actual problem

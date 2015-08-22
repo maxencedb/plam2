@@ -99,6 +99,18 @@ Problem::add_constraint(const Constraint& c)
     }
 }
 
+double
+Problem::get_var_value(std::string name)
+{
+    return glp_mip_col_val(lp, var_indexes[name]);
+}
+
+double
+Problem::get_obj_value()
+{
+    return glp_mip_col_val(lp, 0);
+}
+
 void
 Problem::process_variables()
 {
