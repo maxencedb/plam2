@@ -1,5 +1,107 @@
-\documentclass{article}
-\begin{document}
-An article
-\end{document}
+%        File: Report.tex
+\documentclass[a4paper]{article}
 
+% Packages
+\usepackage[paper=a4paper,margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{pbox}
+\usepackage{changepage}
+
+\begin{document}
+
+%% TITLING
+
+% Top right, name
+\null\hfill\begin{tabular}[t]{l@{}}
+  \textbf{Alexandre Lewkowicz} \\
+  \textbf{Maxence de Bergeyck} \\
+  \textit{SCIA}
+\end{tabular}
+
+% Space before title
+\vspace{1cm}
+
+% Title
+\noindent\makebox[\textwidth][c]{
+  \Large\bfseries PLAM, projet}
+
+% Space avter title
+\vspace{1cm}
+
+%% CONTENTS
+
+\subsection*{Partie I - Modélisation}
+
+\textbf{Soient les constantes données suivantes:}
+
+\begin{description}
+    \item[$M$] \hfill \\
+        Le nombre d'entrepots
+    \item[$N$] \hfill \\
+        Le nombre de sites disponibles
+    \item[$C_{i}$] \hfill \\
+        La capacité de l'entrepot $i$
+    \item[$D_{i, j}$] \hfill \\
+        La distance entre les entrepots $i$ et $j$
+\end{description}
+
+\textbf{Soient les variables résultat suivantes, qu'on définit:}
+
+\begin{description}
+    \item[$b_{i}$] \hfill \\
+        Valeur booléenne indiquant si le site $i$ a été choisi.
+\end{description}
+
+\textbf{On définit la fonction objectif (à maximiser) suivante:}
+
+$$
+Z = \sum\limits_{i = 1}^{N}b_{i} * C_{i}
+$$
+
+On somme la capacité des entrepots activés.
+
+\textbf{Ainsi que les contraintes suivantes:}
+
+\begin{description}
+    \item[$\sum\limits_{i = 1}^{N}b_{i} = M$] \hfill \\
+        La somme des booléens doit être égale au nombre de sites requis
+    \item[$\forall i \in \lbrack1, N\rbrack\  \forall j \in \lbrack1, N\rbrack\quad  b_{i} * b_{j} * D_{i, j} <= 50km$] \hfill \\
+        Les couples dont les deux sites sont présents ne doivent pas être
+        éloignés de plus de 50 km.
+\end{description}
+
+\textbf{Touche finale:}
+
+Le problème de cette modélisation est que la contrainte de distance est \textbf{quadratique}.
+On cherche donc une astuce pour exprimer le problème différemment.
+
+On introduit des variables intermédiaires $\omega_{i, j}$ représentant le ET logique
+entre les variables $b_{i}$ et $b_{j}$. Afin que ces variables aient le bon comportement
+on applique les contraintes suivantes:
+
+\begin{itemize}
+    \item[] $\omega_{i, j} <= b_{i}$
+    \item[] $\omega_{i, j} <= b_{j}$
+\end{itemize}
+
+qui sont caractéristiques du ET logique. Cependant, cela ne force aucunement les
+$\omega$ à prendre la valeur $1$. On ajoute donc les $\omega$ à la fonction
+objectif avec un gros coefficient $K$, et on corrige le resultat avec le terme constant de la fonction objectif car
+on sait combien de couples $\omega_{i, j}$ doivent être activés ($\mathcal{C}_{N}^{M}$).
+On obtiens la nouvelle fonction objectif (à maximiser) suivante:
+
+$$
+Z = \left(\sum\limits_{i = 1}^{N}b_{i} * C_{i}\right)
++ \left(\sum\limits_{i = 1}^{N}\sum\limits_{j = i + 1}^{N} \omega_{i, j} * K\right)
+- \left(\mathcal{C}_{N}^{M} * K\right)
+$$
+
+\subsection*{Partie II - Modélisation, le retour de la revanche}
+
+Je n'ai pas vraiment trouvé une deuxième modélisation du problème.
+
+\end{document}
