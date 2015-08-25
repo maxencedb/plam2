@@ -10,8 +10,10 @@
 \usepackage{listings}
 \usepackage{pbox}
 \usepackage{changepage}
+\usepackage{amsmath}
 
 \begin{document}
+
 
 %% TITLING
 
@@ -69,7 +71,7 @@ On somme la capacité des entrepots activés.
 \begin{description}
     \item[$\sum\limits_{i = 1}^{N}b_{i} = M$] \hfill \\
         La somme des booléens doit être égale au nombre de sites requis
-    \item[$\forall i \in \lbrack1, N\rbrack\  \forall j \in \lbrack1, N\rbrack\quad  b_{i} * b_{j} * D_{i, j} <= 50km$] \hfill \\
+    \item[$\forall i \in \lbrack1, N\rbrack\  \forall j \in \lbrack1, N\rbrack\quad  b_{i} * b_{j} * D_{i, j} \le 50km$] \hfill \\
         Les couples dont les deux sites sont présents ne doivent pas être
         éloignés de plus de 50 km.
 \end{description}
@@ -84,8 +86,8 @@ entre les variables $b_{i}$ et $b_{j}$. Afin que ces variables aient le bon comp
 on applique les contraintes suivantes:
 
 \begin{itemize}
-    \item[] $\omega_{i, j} <= b_{i}$
-    \item[] $\omega_{i, j} <= b_{j}$
+    \item[] $\omega_{i, j} \le b_{i}$
+    \item[] $\omega_{i, j} \le b_{j}$
 \end{itemize}
 
 qui sont caractéristiques du ET logique. Cependant, cela ne force aucunement les
@@ -102,6 +104,16 @@ $$
 
 \subsection*{Partie II - Modélisation, le retour de la revanche}
 
-Je n'ai pas vraiment trouvé une deuxième modélisation du problème.
+On garde les même données que la modélisation précédente, la même fonction
+objectif (la première), mais des contraintes différentes. On veut que la (les)
+contraintes suivantes soient respectées (en plus de la somme des booléens
+égale à $M$):
+
+$$
+\forall i \in \lbrack1, N\rbrack\  \forall j \in \lbrack1, N\rbrack 
+\quad D_{i, j} > 50km \implies b_{i} + b_{j} \le 1
+$$
+
+On ajoute les contraintes nécessaires en fonction de la distance des sites.
 
 \end{document}
