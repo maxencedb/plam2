@@ -11,7 +11,7 @@ void plam(const Parser& p, std::ostream& output)
 {
     Problem prob;
 
-    prob.set_name("Warehouse mumbo-jumbo");
+    prob.set_name("Search for the bestest warehouses, method 1");
     prob.set_maximize();
 
     /* Variables */
@@ -126,6 +126,98 @@ void plam(const Parser& p, std::ostream& output)
 
             prob.add_var_coef(ss.str(), incentive);
         }
+
+    /* Do magic */
+    prob.solve();
+
+    /* Display solution */
+    //prob.display_solution(output);
+    
+    for (int i = 0; i < p.nr_sites; ++i)
+    {
+        std::stringstream ss;
+        ss << "b" << i + 1;
+
+        if (prob.get_var_value(ss.str()) > 0.5)
+            output << i + 1 << " ";
+    }
+    output << "\n";
+}
+
+void plam_le_retour(const Parser& p, std::ostream& output)
+{
+    Problem prob;
+
+    prob.set_name("Search for the bestest warehouses, method 1");
+    prob.set_maximize();
+
+    /* Variables */
+
+    // Add all warehouse activation variables
+    for (int i = 0; i < p.nr_sites; ++i)
+    {
+        std::stringstream ss;
+        ss << "b" << i + 1;
+        prob.add_variable(Variable(ss.str(), GLP_BV));
+    }
+
+    /* Constraints */
+
+    // Boolean sum
+    {
+        Constraint tmp("The sum of the booleans must be == M"
+                     , GLP_FX
+                     , p.nr_warhouses
+                     , p.nr_warhouses);
+
+        for (int i = 0; i < p.nr_sites; ++i)
+        {
+            std::stringstream ss;
+            ss << "b" << i + 1;
+            tmp.set_var_coef(ss.str(), 1.0);
+        }
+        prob.add_constraint(tmp);
+    }
+
+    // Distance constraints
+    {
+        for (int i = 0; i < p.nr_sites; ++i)
+            for (int j = i + 1; j < p.nr_sites; ++j)
+            {
+                if (dist_sq(p.positions[i], p.positions[j]) > 2500)
+                {
+                    std::stringstream ss;
+                    ss << "Either b" << i + 1 << " or b" << j + 1 << " but not both";
+
+                    Constraint tmp(ss.str()
+                                 , GLP_UP
+                                 , 1
+                                 , 1);
+
+                    std::stringstream ssI;
+                    std::stringstream ssJ;
+
+                    ssI << "b" << i + 1;
+                    ssJ << "b" << j + 1;
+
+                    tmp.set_var_coef(ssI.str(), 1);
+                    tmp.set_var_coef(ssJ.str(), 1);
+
+                    prob.add_constraint(tmp);
+                }
+            }
+    }
+
+    /* Objective */
+
+    // capacities
+    for (int i = 0; i < p.nr_sites; ++i)
+    {
+        std::stringstream ss;
+        ss << "b" << i + 1;
+
+        prob.add_var_coef(ss.str(), p.capacities[i]);
+    }
 
     /* Do magic */
     prob.solve();
